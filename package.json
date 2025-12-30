@@ -48,7 +48,7 @@
         "publish": "vsce publish"
     },
     "keywords": ["油糕yougao", "AI编程", "VSCode插件", "DeepSeek", "火山引擎", "可视化Agent"],
-    "author": "油糕开发者",
+    "author": "ahua2020qq",
     "license": "MIT",
     "publisher": "yougao-dev",
     "repository": {
