@@ -1,0 +1,67 @@
+{
+    "name": "yougao-deepseek-code-workflow",
+    "displayName": "DeepSeek Code Workflow",
+    "description": "油糕出品 | 可视化AI编程Agent编排工具 | 复刻Claude Code Workflow能力，适配火山引擎DeepSeek，让编码更有烟火气",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.80.0"
+    },
+    "categories": [
+        "Programming Languages",
+        "AI"
+    ],
+    "activationEvents": [
+        "onStartupFinished"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "configuration": {
+            "title": "DeepSeek Code Workflow",
+            "properties": {
+                "deepseek-code-workflow.apiKey": {
+                    "type": "string",
+                    "description": "火山引擎API Key",
+                    "default": ""
+                },
+                "deepseek-code-workflow.baseUrl": {
+                    "type": "string",
+                    "default": "https://api.deepseek.com/anthropic",
+                    "description": "火山引擎DeepSeek API Base URL"
+                },
+                "deepseek-code-workflow.model": {
+                    "type": "string",
+                    "enum": [
+                        "deepseek-chat",
+                        "deepseek-reasoner"
+                    ],
+                    "default": "deepseek-reasoner",
+                    "description": "DeepSeek模型选择"
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "package": "vsce package --no-dependencies",
+        "publish": "vsce publish"
+    },
+    "keywords": ["油糕yougao", "AI编程", "VSCode插件", "DeepSeek", "火山引擎", "可视化Agent"],
+    "author": "油糕开发者",
+    "license": "MIT",
+    "publisher": "yougao-dev",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ahua2020qq/yougao-deepseek-code-workflow.git"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.80.0",
+        "@types/node": "^20.5.0",
+        "typescript": "^5.1.0",
+        "vsce": "^2.15.0"
+    },
+    "dependencies": {
+        "@anthropic-ai/sdk": "^0.20.0"
+    }
+}
