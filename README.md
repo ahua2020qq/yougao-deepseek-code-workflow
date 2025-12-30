@@ -58,7 +58,7 @@ npm run package
 
 ### 2. 配置插件
 1. 打开VSCode设置（快捷键 `Ctrl+,`）
-2. 搜索 `DeepSeek Code Workflow`
+2. 搜索 `油糕出品 | DeepSeek Code Workflow`
 3. 填写以下配置：
    - **火山引擎API Key**：从控制台获取的密钥
    - **Base URL**：保持默认 `https://api.deepseek.com/anthropic`
@@ -66,7 +66,7 @@ npm run package
 
 ### 3. 开始使用
 - 按 `Ctrl+Shift+P` 打开命令面板
-- 输入 `DeepSeek Code Workflow: Run Agent`
+- 输入 `油糕出品 | DeepSeek Code Workflow: Run Agent`
 - 输入任务描述，如："编写一个VSCode插件的hello world入口"
 
 ## 📁 项目结构

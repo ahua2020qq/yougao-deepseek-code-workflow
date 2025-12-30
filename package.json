@@ -1,6 +1,6 @@
 {
     "name": "yougao-deepseek-code-workflow",
-    "displayName": "DeepSeek Code Workflow",
+    "displayName": "油糕出品 | DeepSeek Code Workflow",
     "description": "油糕出品 | 可视化AI编程Agent编排工具 | 复刻Claude Code Workflow能力，适配火山引擎DeepSeek，让编码更有烟火气",
     "version": "0.0.1",
     "engines": {
@@ -18,17 +18,17 @@
         "configuration": {
             "title": "DeepSeek Code Workflow",
             "properties": {
-                "deepseek-code-workflow.apiKey": {
+                "yougao-deepseek-code-workflow.apiKey": {
                     "type": "string",
                     "description": "火山引擎API Key",
                     "default": ""
                 },
-                "deepseek-code-workflow.baseUrl": {
+                "yougao-deepseek-code-workflow.baseUrl": {
                     "type": "string",
                     "default": "https://api.deepseek.com/anthropic",
                     "description": "火山引擎DeepSeek API Base URL"
                 },
-                "deepseek-code-workflow.model": {
+                "yougao-deepseek-code-workflow.model": {
                     "type": "string",
                     "enum": [
                         "deepseek-chat",

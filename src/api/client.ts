@@ -10,7 +10,7 @@ export class VolcDeepSeekClient {
     private config: vscode.WorkspaceConfiguration;
 
     constructor() {
-        this.config = vscode.workspace.getConfiguration('deepseek-code-workflow');
+        this.config = vscode.workspace.getConfiguration('yougao-deepseek-code-workflow');
         this.client = this.initClient();
     }
 
@@ -23,8 +23,8 @@ export class VolcDeepSeekClient {
         const model = this.config.get<string>('model') || 'deepseek-reasoner';
 
         if (!apiKey) {
-            vscode.window.showErrorMessage('请配置火山引擎API Key！');
-            throw new Error('DeepSeek API Key not configured');
+            vscode.window.showErrorMessage('油糕出品 | 请配置火山引擎API Key！');
+            throw new Error('Yougao DeepSeek API Key not configured');
         }
 
         const options: ClientOptions = {
@@ -32,7 +32,7 @@ export class VolcDeepSeekClient {
             baseURL,
             defaultHeaders: {
                 'x-volc-engine-access': 'true',
-                'User-Agent': 'DeepSeek-Code-Workflow-VSCode-Extension'
+                'User-Agent': 'Yougao-DeepSeek-Code-Workflow-VSCode-Extension'
             },
             timeout: 15000 // 火山引擎推荐超时时间
         };

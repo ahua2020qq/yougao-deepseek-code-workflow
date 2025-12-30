@@ -7,7 +7,7 @@ import { deepseekClient } from './api/client';
 export function activate(context: vscode.ExtensionContext) {
     // 注册Agent运行命令
     const runAgentCommand = vscode.commands.registerCommand(
-        'deepseek-code-workflow.runAgent',
+        'yougao-deepseek-code-workflow.runAgent',
         async () => {
             try {
                 // 弹出输入框获取用户提示词
@@ -51,7 +51,7 @@ export function activate(context: vscode.ExtensionContext) {
                 ]);
 
                 // 输出结果到VSCode终端
-                const outputChannel = vscode.window.createOutputChannel('DeepSeek Code Workflow');
+                const outputChannel = vscode.window.createOutputChannel('油糕出品 | DeepSeek Code Workflow');
                 outputChannel.show();
                 outputChannel.appendLine('=== Code Agent执行结果 ===');
                 response.content.forEach(item => {
