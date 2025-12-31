@@ -39,3 +39,9 @@ calc.js
 *.test.tmp
 # PowerShell测试脚本执行产物
 *.ps1.xml
+
+# 禁止所有测试脚本文件（避免后续再传类似文件）
+test-*.js
+test_*.js
+test-*.ps1
+test_*.ps1
