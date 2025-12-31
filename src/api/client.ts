@@ -46,6 +46,9 @@ export class VolcDeepSeekClient {
      * @param tools 工具列表
      */
     async runAgent(prompt: string, tools: any[] = []) {
+        console.log('DeepSeek客户端: 开始运行Agent，prompt长度:', prompt.length);
+        console.log('DeepSeek客户端: 使用模型:', this.config.get<string>('model') || 'deepseek-reasoner');
+        
         const requestFn = async () => {
             // 火山引擎DeepSeek API扩展了标准Anthropic API，支持tools参数
             // 使用类型断言绕过SDK类型检查
@@ -59,16 +62,26 @@ export class VolcDeepSeekClient {
             if (tools && tools.length > 0) {
                 params.tools = tools;
                 params.tool_choice = 'auto';
+                console.log('DeepSeek客户端: 使用工具数量:', tools.length);
             }
             
+            console.log('DeepSeek客户端: 调用API...');
             return await this.client.messages.create(params);
         };
 
         // 火山引擎稳定性加固：指数退避重试
-        return await exponentialBackoffRetry(requestFn, {
-            maxRetries: 3,
-            initialDelay: 1000
-        });
+        console.log('DeepSeek客户端: 开始执行请求...');
+        try {
+            const result = await exponentialBackoffRetry(requestFn, {
+                maxRetries: 3,
+                initialDelay: 1000
+            });
+            console.log('DeepSeek客户端: 请求成功完成');
+            return result;
+        } catch (error) {
+            console.error('DeepSeek客户端: 请求失败:', error);
+            throw error;
+        }
     }
 }
 

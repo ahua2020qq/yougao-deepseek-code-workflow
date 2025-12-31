@@ -15,6 +15,13 @@
     ],
     "main": "./out/extension.js",
     "contributes": {
+        "commands": [
+            {
+                "command": "yougao-deepseek-code-workflow.runAgent",
+                "title": "油糕出品 | 运行DeepSeek Code Agent",
+                "category": "油糕出品"
+            }
+        ],
         "configuration": {
             "title": "DeepSeek Code Workflow",
             "properties": {
