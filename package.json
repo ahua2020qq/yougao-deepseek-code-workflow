@@ -32,16 +32,17 @@
                 },
                 "yougao-deepseek-code-workflow.baseUrl": {
                     "type": "string",
-                    "default": "https://api.deepseek.com/anthropic",
+                    "default": "https://ark.cn-beijing.volces.com/api/v3",
                     "description": "火山引擎DeepSeek API Base URL"
                 },
                 "yougao-deepseek-code-workflow.model": {
                     "type": "string",
                     "enum": [
+                        "deepseek-v3-2-251201",
                         "deepseek-chat",
                         "deepseek-reasoner"
                     ],
-                    "default": "deepseek-reasoner",
+                    "default": "deepseek-v3-2-251201",
                     "description": "DeepSeek模型选择"
                 }
             }
@@ -54,7 +55,14 @@
         "package": "vsce package --no-dependencies",
         "publish": "vsce publish"
     },
-    "keywords": ["油糕yougao", "AI编程", "VSCode插件", "DeepSeek", "火山引擎", "可视化Agent"],
+    "keywords": [
+        "油糕yougao",
+        "AI编程",
+        "VSCode插件",
+        "DeepSeek",
+        "火山引擎",
+        "可视化Agent"
+    ],
     "author": "ahua2020qq",
     "license": "MIT",
     "publisher": "yougao-dev",
@@ -63,12 +71,12 @@
         "url": "https://github.com/ahua2020qq/yougao-deepseek-code-workflow.git"
     },
     "devDependencies": {
-        "@types/vscode": "^1.80.0",
         "@types/node": "^20.5.0",
+        "@types/vscode": "^1.80.0",
         "typescript": "^5.1.0",
         "vsce": "^2.15.0"
     },
     "dependencies": {
-        "@anthropic-ai/sdk": "^0.20.0"
+        "openai": "^4.104.0"
     }
 }

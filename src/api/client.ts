@@ -1,12 +1,12 @@
-import { ClientOptions, Anthropic } from '@anthropic-ai/sdk';
+import OpenAI from 'openai';
 import * as vscode from 'vscode';
 import { exponentialBackoffRetry } from '../utils/retry';
 
 /**
- * 火山引擎DeepSeek客户端（兼容Anthropic接口）
+ * 火山引擎DeepSeek客户端（使用OpenAI兼容接口）
  */
 export class VolcDeepSeekClient {
-    private client: Anthropic;
+    private client: OpenAI;
     private config: vscode.WorkspaceConfiguration;
 
     constructor() {
@@ -17,27 +17,43 @@ export class VolcDeepSeekClient {
     /**
      * 初始化火山引擎DeepSeek客户端
      */
-    private initClient(): Anthropic {
-        const apiKey = this.config.get<string>('apiKey') || process.env.VOLC_API_KEY;
-        const baseURL = this.config.get<string>('baseUrl') || 'https://api.deepseek.com/anthropic';
-        const model = this.config.get<string>('model') || 'deepseek-reasoner';
+    private initClient(): OpenAI {
+        const apiKey = this.config.get<string>('apiKey') || process.env.ARK_API_KEY;
+        const baseURL = this.config.get<string>('baseUrl') || 'https://ark.cn-beijing.volces.com/api/v3';
+        const model = this.config.get<string>('model') || 'deepseek-v3-2-251201';
 
         if (!apiKey) {
             vscode.window.showErrorMessage('油糕出品 | 请配置火山引擎API Key！');
             throw new Error('Yougao DeepSeek API Key not configured');
         }
 
-        const options: ClientOptions = {
+        console.log('DeepSeek客户端: 初始化OpenAI客户端');
+        console.log('DeepSeek客户端: BaseURL:', baseURL);
+        console.log('DeepSeek客户端: 模型:', model);
+
+        return new OpenAI({
             apiKey,
             baseURL,
             defaultHeaders: {
-                'x-volc-engine-access': 'true',
                 'User-Agent': 'Yougao-DeepSeek-Code-Workflow-VSCode-Extension'
             },
-            timeout: 15000 // 火山引擎推荐超时时间
-        };
+            timeout: 30000 // 30秒超时
+        });
+    }
 
-        return new Anthropic(options);
+    /**
+     * 转换工具格式为OpenAI兼容格式
+     * @param tools 原始工具列表
+     */
+    private convertToolsToOpenAIFormat(tools: any[]): any[] {
+        return tools.map(tool => ({
+            type: 'function',
+            function: {
+                name: tool.name,
+                description: tool.description,
+                parameters: tool.input_schema
+            }
+        }));
     }
 
     /**
@@ -47,26 +63,44 @@ export class VolcDeepSeekClient {
      */
     async runAgent(prompt: string, tools: any[] = []) {
         console.log('DeepSeek客户端: 开始运行Agent，prompt长度:', prompt.length);
-        console.log('DeepSeek客户端: 使用模型:', this.config.get<string>('model') || 'deepseek-reasoner');
+        console.log('DeepSeek客户端: 使用模型:', this.config.get<string>('model') || 'deepseek-v3-2-251201');
         
         const requestFn = async () => {
-            // 火山引擎DeepSeek API扩展了标准Anthropic API，支持tools参数
-            // 使用类型断言绕过SDK类型检查
+            // 构建OpenAI兼容的请求参数
             const params: any = {
-                model: this.config.get<string>('model') || 'deepseek-reasoner',
+                model: this.config.get<string>('model') || 'deepseek-v3-2-251201',
                 max_tokens: 4096,
-                messages: [{ role: 'user', content: prompt }]
+                messages: [
+                    {
+                        role: 'system',
+                        content: '你是一个专业的代码助手，可以帮助用户编写、调试和优化代码。请根据用户的需求生成高质量的代码。'
+                    },
+                    {
+                        role: 'user',
+                        content: prompt
+                    }
+                ],
+                stream: false
             };
             
             // 只有在有工具时才添加tools参数
             if (tools && tools.length > 0) {
-                params.tools = tools;
+                const openAITools = this.convertToolsToOpenAIFormat(tools);
+                params.tools = openAITools;
                 params.tool_choice = 'auto';
                 console.log('DeepSeek客户端: 使用工具数量:', tools.length);
+                console.log('DeepSeek客户端: 转换后的工具格式:', JSON.stringify(openAITools, null, 2));
             }
             
             console.log('DeepSeek客户端: 调用API...');
-            return await this.client.messages.create(params);
+            console.log('DeepSeek客户端: 请求参数:', JSON.stringify({
+                model: params.model,
+                messages: params.messages,
+                hasTools: tools.length > 0,
+                toolsCount: tools.length
+            }, null, 2));
+            
+            return await this.client.chat.completions.create(params);
         };
 
         // 火山引擎稳定性加固：指数退避重试
@@ -77,6 +111,7 @@ export class VolcDeepSeekClient {
                 initialDelay: 1000
             });
             console.log('DeepSeek客户端: 请求成功完成');
+            console.log('DeepSeek客户端: 响应使用量:', result.usage);
             return result;
         } catch (error) {
             console.error('DeepSeek客户端: 请求失败:', error);
